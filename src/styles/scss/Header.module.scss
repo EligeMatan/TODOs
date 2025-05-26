@@ -1,0 +1,16 @@
+.Header {
+    background: radial-gradient(circle, #3057a0 10%, #348120 50%);
+    color: white;
+    width: 100%;
+    position: sticky;
+    top: 0px;
+
+    display: flex;
+    justify-content: left;
+    align-items: start;
+
+    h1 {
+        margin-left: 10%;
+    }
+
+}

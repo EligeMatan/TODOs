@@ -1,0 +1,33 @@
+.Main {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    flex-direction: column;
+    padding-bottom: 45px;
+    // flex: 1;
+
+    h1 {
+        font-size: 2.5rem;
+        text-align: left;
+        width: 60%;
+    }
+
+    .TimeSpan {
+        margin: 20px 0;
+        text-align: left;
+        width: 60%;
+    }
+
+    .InputTasks {
+        width: 60%;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #0d075f;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+}
+
+
+    

@@ -1,0 +1,77 @@
+.Item {
+    display: flex;
+    flex-direction: row;
+    // justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 0 12px;
+    border: 1px gray solid;
+    border-radius: 5px;
+    animation: fadeIn .3s ease-in-out;
+
+    input[type="checkbox"] {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+
+        &:checked {
+            border: none;
+            outline: none;
+            color: green;
+        }
+    }
+
+    .Text {
+        flex: 1;    
+        padding: 0 8px;
+        font-size: 1.2rem;
+        text-align: left;
+
+        // Перенос тексту
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
+        min-width: 0;
+
+        text-decoration: none;
+    }
+
+    .TextDone {
+        text-decoration: line-through;
+    }
+
+    svg {
+        flex-shrink: 0;
+        font-size: 1.4rem;
+        cursor: pointer;
+        color: #888;
+
+        &:hover {
+            color: red;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: 6px 8px;
+
+        p {
+            font-size: 1rem;
+        }
+
+        svg {
+            font-size: 1.2rem;
+        }
+    }
+}

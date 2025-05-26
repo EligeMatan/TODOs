@@ -1,0 +1,22 @@
+.Footer {
+    background: radial-gradient(circle, #3057a0 10%, #348120 50%);
+    color: white;
+    width: 100%;
+    height: 40px;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    // z-index: 1000;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    // padding-right: 2rem; 
+    // align-items: start;
+
+    h3 {
+        margin-right: 2rem;
+        font-size: 1rem;
+    }
+}
