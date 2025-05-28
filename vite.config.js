@@ -8,9 +8,13 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default defineConfig(({ mode }) => {
+  // eslint-disable-next-line no-undef
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
+    base: '/TODOs/',
+    // base: './',
+    // base: mode === 'production' ? '/TODOs/' : './',
     server: {
       host: env.VITE_HOST || 'localhost',
       port: Number(env.VITE_PORT) || 8099,

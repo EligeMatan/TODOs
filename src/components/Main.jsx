@@ -20,7 +20,7 @@ export default function Main() {
 
   useEffect(() => {
     console.log('isInitLoading', isInitLoading);
-    if(isInitLoading.current) {
+    if (isInitLoading.current) {
       isInitLoading.current = false;
       return;
 
@@ -56,18 +56,14 @@ export default function Main() {
       <h1>Note you tasks</h1>
       <span className={styles.TimeSpan}>{today}</span>
 
-      <ErrorBoundary>
-        <Form.Control
-          type="text"
-          placeholder="Task name"
-          className={styles.InputTasks}
-          onKeyDown={handleKeyDown}
-        />
-      </ErrorBoundary>
+      <Form.Control
+        type="text"
+        placeholder="Task name"
+        className={styles.InputTasks}
+        onKeyDown={handleKeyDown}
+      />
 
-      <ErrorBoundary>
-        <List tasks={tasks} onDelete={handleDelete} onToggle={toggleCheck} />
-      </ErrorBoundary>
+      <List tasks={tasks} onDelete={handleDelete} onToggle={toggleCheck} />
 
     </section>
   )
