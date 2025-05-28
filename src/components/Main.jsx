@@ -6,17 +6,15 @@ import ErrorBoundary from './ErrorBoundary';
 
 export default function Main() {
   let today = (new Date()).toLocaleDateString();
-  const [tasks, setTasks] = useState([]);
-  const isInitLoading = useRef(true);
-
-  useEffect(() => {
+  const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem('tasks');
 
     if (savedTasks) {
       setTasks(JSON.parse(savedTasks))
     }
+  });
 
-  }, []);
+  const isInitLoading = useRef(true);
 
   useEffect(() => {
     console.log('isInitLoading', isInitLoading);
@@ -31,7 +29,12 @@ export default function Main() {
 
   const handleKeyDown = (event) => {
     let input = event.target.value;
-    const newTask = { message: input.trim(), done: false };
+
+    const newTask = {
+      message: input.trim(),
+      done: false,
+      time: Date.now(), // записуємо дату створення
+    };
 
     if (event.key === 'Enter' && input.trim()) {
       // alert(event.target.value);
@@ -63,7 +66,16 @@ export default function Main() {
         onKeyDown={handleKeyDown}
       />
 
-      <List tasks={tasks} onDelete={handleDelete} onToggle={toggleCheck} />
+      <List
+        tasks={tasks}
+        onDelete={handleDelete}
+        onToggle={toggleCheck}
+        onEdit={(index, newMessage) => {
+          setTasks(prev => prev.map((item, i) =>
+            i === index ? { ...item, message: newMessage } : item
+          ));
+        }}
+      />
 
     </section>
   )
