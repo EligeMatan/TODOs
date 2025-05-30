@@ -2,8 +2,11 @@ import styles from '@/styles/scss/Item.module.scss';
 import { MdOutlineDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { useState } from 'react';
+import { useTasks } from './context/TasksContext';
 
-export default function Item({ task, onDelete, onToggle, onEdit }) {
+export default function Item({ task, index }) {
+  const { toggleCheck, handleDelete, handleEdit } = useTasks();
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(task.message);
   const [error, setError] = useState('');
@@ -12,13 +15,13 @@ export default function Item({ task, onDelete, onToggle, onEdit }) {
     setIsEditing(true);
     setEditedText(task.message);
     setError('');
-  }
+  };
 
   const cancelEditing = () => {
     setIsEditing(false);
     setEditedText(task.message);
     setError('');
-  }
+  };
 
   const handleSave = () => {
     const trimmed = editedText.trim();
@@ -26,30 +29,21 @@ export default function Item({ task, onDelete, onToggle, onEdit }) {
       setError('Значення не може бути порожнім');
       return;
     }
-
     if (trimmed !== task.message) {
-      onEdit(trimmed);
+      handleEdit(index, trimmed);
     }
-
     setIsEditing(false);
     setError('');
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') { handleSave(); }
-    else if (e.key === 'Escape') { cancelEditing(); }
+    if (e.key === 'Enter') handleSave();
+    else if (e.key === 'Escape') cancelEditing();
   };
-
-  // const handleEdit = () => setIsEditing(true);
-
-  // const handleBlur = (event) => {
-  //   setIsEditing(false);
-  //   setEditedText(event.target.value);
-  // }
 
   return (
     <div className={styles.Item}>
-      <input type="checkbox" checked={task.done} onChange={onToggle} />
+      <input type="checkbox" checked={task.done} onChange={() => toggleCheck(index)} />
 
       <div className={styles.Content}>
         <span className={styles.Timestamp}>
@@ -76,10 +70,8 @@ export default function Item({ task, onDelete, onToggle, onEdit }) {
         )}
       </div>
 
-
-      <FaRegEdit onClick={handleEdit} />
-      <MdOutlineDelete onClick={onDelete} />
-
+      <FaRegEdit className={styles.SignEdit} onClick={startEditing} />
+      <MdOutlineDelete className={styles.SignDelete} onClick={() => handleDelete(index)} />
     </div>
-  )
-};
+  );
+}

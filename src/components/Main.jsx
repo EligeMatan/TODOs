@@ -2,81 +2,73 @@ import styles from '@/styles/scss/Main.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import List from './List';
-import ErrorBoundary from './ErrorBoundary';
+import { TasksContext } from './context/TasksContext';
 
 export default function Main() {
-  let today = (new Date()).toLocaleDateString();
+  const today = new Date().toLocaleDateString();
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem('tasks');
-
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks))
-    }
+    return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
   const isInitLoading = useRef(true);
 
   useEffect(() => {
-    console.log('isInitLoading', isInitLoading);
     if (isInitLoading.current) {
       isInitLoading.current = false;
       return;
-
     }
-
     localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks])
+  }, [tasks]);
 
-  const handleKeyDown = (event) => {
-    let input = event.target.value;
-
+  const addTask = (message) => {
     const newTask = {
-      message: input.trim(),
+      message,
       done: false,
-      time: Date.now(), // записуємо дату створення
+      time: Date.now(),
     };
-
-    if (event.key === 'Enter' && input.trim()) {
-      // alert(event.target.value);
-      setTasks(prev => [...prev, newTask]);
-      event.target.value = '';
-    }
-
-  }
+    setTasks(prev => [...prev, newTask]);
+  };
 
   const toggleCheck = (index) => {
-    setTasks(prev => prev.map((item, ind) =>
-      ind === index ? { ...item, done: !item.done } : item
+    setTasks(prev => prev.map((item, i) =>
+      i === index ? { ...item, done: !item.done } : item
     ));
-  }
+  };
 
   const handleDelete = (index) => {
-    setTasks(prev => prev.filter((_, ind) => ind !== index))
-  }
+    setTasks(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleEdit = (index, newMessage) => {
+    setTasks(prev => prev.map((item, i) =>
+      i === index ? { ...item, message: newMessage } : item
+    ));
+  };
+
+  const handleKeyDown = (event) => {
+    const input = event.target.value.trim();
+    if (event.key === 'Enter' && input) {
+      addTask(input);
+      event.target.value = '';
+    }
+  };
 
   return (
-    <section className={styles.Main}>
-      <h1>Note you tasks</h1>
-      <span className={styles.TimeSpan}>{today}</span>
+    <TasksContext.Provider value={{ tasks, toggleCheck, handleDelete, handleEdit }}>
+      <section className={styles.Main}>
+        <h1>Note your tasks</h1>
+        <span className={styles.TimeSpan}>{today}</span>
 
-      <Form.Control
-        type="text"
-        placeholder="Task name"
-        className={styles.InputTasks}
-        onKeyDown={handleKeyDown}
-      />
+        <Form.Control
+          type="text"
+          placeholder="Input your task and press Enter"
+          className={styles.InputTasks}
+          onKeyDown={handleKeyDown}
+        />
 
-      <List
-        tasks={tasks}
-        onDelete={handleDelete}
-        onToggle={toggleCheck}
-        onEdit={(index, newMessage) => {
-          setTasks(prev => prev.map((item, i) =>
-            i === index ? { ...item, message: newMessage } : item
-          ));
-        }}
-      />
-
-    </section>
-  )
-};
+        <List />
+      </section>
+    </TasksContext.Provider>
+  );
+}
